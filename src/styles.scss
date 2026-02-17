@@ -1,0 +1,35 @@
+/* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+
+// Custom Material palettes (brand-forward, warm legal aesthetic).
+$vanessa-primary: mat.define-palette(mat.$indigo-palette, 700, 500, 900);
+$vanessa-accent: mat.define-palette(mat.$amber-palette, 600, 500, 800);
+$vanessa-warn: mat.define-palette(mat.$red-palette);
+
+// Typography configuration.
+$vanessa-typography: mat.define-typography-config(
+  $font-family: "Poppins, Roboto, Helvetica Neue, sans-serif"
+);
+
+// Light theme setup.
+$vanessa-theme: mat.define-light-theme((
+  color: (
+    primary: $vanessa-primary,
+    accent: $vanessa-accent,
+    warn: $vanessa-warn
+  ),
+  typography: $vanessa-typography,
+  density: 0
+));
+
+@include mat.core();
+@include mat.all-component-themes($vanessa-theme);
+@include mat.typography-hierarchy($vanessa-typography);
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: "Poppins", "Roboto", "Helvetica Neue", sans-serif;
+  background: #faf7f2;
+  color: #1f1b16;
+}
