@@ -1,0 +1,76 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 64px;
+  @include elevation(2);
+
+  @media (max-width: 600px) {
+    height: 56px;
+  }
+}
+
+.menu-button {
+  margin-right: 8px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+  font-size: 1.1rem;
+
+  .logo-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .logo-text {
+    @media (max-width: 400px) {
+      display: none;
+    }
+  }
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  a {
+    &.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  right: 0;
+  background: white;
+  z-index: 999;
+  max-height: calc(100vh - 56px);
+  overflow-y: auto;
+  @include elevation(3);
+
+  @media (min-width: 600px) {
+    top: 64px;
+    max-height: calc(100vh - 64px);
+  }
+
+  a.active {
+    background-color: rgba(63, 81, 181, 0.08);
+  }
+}

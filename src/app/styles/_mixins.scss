@@ -1,0 +1,41 @@
+@import './variables';
+
+// Mixin para breakpoints
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'xs' {
+    @media (max-width: $breakpoint-sm - 1) {
+      @content;
+    }
+  }
+  @if $breakpoint == 'sm' {
+    @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-md - 1) {
+      @content;
+    }
+  }
+  @if $breakpoint == 'md' {
+    @media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg - 1) {
+      @content;
+    }
+  }
+  @if $breakpoint == 'lg' {
+    @media (min-width: $breakpoint-lg) and (max-width: $breakpoint-xl - 1) {
+      @content;
+    }
+  }
+  @if $breakpoint == 'xl' {
+    @media (min-width: $breakpoint-xl) {
+      @content;
+    }
+  }
+}
+
+// Mixin para sombras Material
+@mixin elevation($level) {
+  @if $level == 1 {
+    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+  } @else if $level == 2 {
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  } @else if $level == 3 {
+    box-shadow: 0 3px 3px -2px rgba(0,0,0,.2), 0 3px 4px 0 rgba(0,0,0,.14), 0 1px 8px 0 rgba(0,0,0,.12);
+  }
+}

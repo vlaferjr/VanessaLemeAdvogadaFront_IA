@@ -1,0 +1,232 @@
+<div class="contact-page">
+  <!-- Hero -->
+  <section class="contact-hero">
+    <div class="container">
+      <h1>Entre em Contato</h1>
+      <p class="subtitle">
+        Estou à disposição para esclarecer suas dúvidas e agendar uma consulta
+      </p>
+    </div>
+  </section>
+
+  <!-- Conteúdo Principal -->
+  <section class="contact-content">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- Informações de Contato -->
+        <div class="contact-info-section">
+          <h2>Informações de Contato</h2>
+          <p class="info-description">
+            Entre em contato através de qualquer um dos canais abaixo.
+            Responderei o mais breve possível.
+          </p>
+
+          <div class="contact-cards">
+            <mat-card class="info-card" *ngFor="let info of contactInfo">
+              <mat-card-content>
+                <mat-icon color="primary">{{ info.icon }}</mat-icon>
+                <div class="info-details">
+                  <h3>{{ info.title }}</h3>
+                  <a *ngIf="info.link; else noLink" [href]="info.link" target="_blank">
+                    {{ info.value }}
+                  </a>
+                  <ng-template #noLink>
+                    <p>{{ info.value }}</p>
+                  </ng-template>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+          <!-- Redes Sociais (opcional) -->
+          <div class="social-links">
+            <h3>Conecte-se</h3>
+            <div class="social-buttons">
+              <button mat-icon-button color="primary" aria-label="WhatsApp">
+                <mat-icon>phone</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" aria-label="LinkedIn">
+                <mat-icon>business</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" aria-label="Instagram">
+                <mat-icon>photo_camera</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulário -->
+        <div class="contact-form-section">
+          <mat-card class="form-card">
+            <mat-card-header>
+              <mat-card-title>Envie uma Mensagem</mat-card-title>
+              <mat-card-subtitle>Preencha o formulário e retornarei em breve</mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content>
+              <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+
+                <!-- Nome -->
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Nome Completo</mat-label>
+                  <input matInput formControlName="nome" placeholder="Digite seu nome completo">
+                  <mat-icon matPrefix>person</mat-icon>
+                  <mat-error *ngIf="nome?.invalid && nome?.touched">
+                    {{ getErrorMessage('nome') }}
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- E-mail -->
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>E-mail</mat-label>
+                  <input matInput type="email" formControlName="email" placeholder="seu@email.com">
+                  <mat-icon matPrefix>email</mat-icon>
+                  <mat-error *ngIf="email?.invalid && email?.touched">
+                    {{ getErrorMessage('email') }}
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- Telefone -->
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Telefone</mat-label>
+                  <input
+                    matInput
+                    formControlName="telefone"
+                    placeholder="(11) 91234-5678"
+                    (input)="onTelefoneInput($event)">
+                  <mat-icon matPrefix>phone</mat-icon>
+                  <mat-error *ngIf="telefone?.invalid && telefone?.touched">
+                    {{ getErrorMessage('telefone') }}
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- Assunto -->
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Assunto</mat-label>
+                  <mat-select formControlName="assunto">
+                    <mat-option value="consulta">Agendar Consulta</mat-option>
+                    <mat-option value="acao_trabalhista">Ação Trabalhista</mat-option>
+                    <mat-option value="consultoria">Consultoria Empresarial</mat-option>
+                    <mat-option value="acordo">Acordo/Negociação</mat-option>
+                    <mat-option value="duvida">Dúvida Jurídica</mat-option>
+                    <mat-option value="outro">Outro Assunto</mat-option>
+                  </mat-select>
+                  <mat-icon matPrefix>subject</mat-icon>
+                  <mat-error *ngIf="assunto?.invalid && assunto?.touched">
+                    {{ getErrorMessage('assunto') }}
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- Mensagem -->
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Mensagem</mat-label>
+                  <textarea
+                    matInput
+                    formControlName="mensagem"
+                    rows="5"
+                    placeholder="Descreva brevemente sua situação ou dúvida"></textarea>
+                  <mat-icon matPrefix>message</mat-icon>
+                  <mat-error *ngIf="mensagem?.invalid && mensagem?.touched">
+                    {{ getErrorMessage('mensagem') }}
+                  </mat-error>
+                  <mat-hint align="end">
+                    {{ mensagem?.value?.length || 0 }} caracteres
+                  </mat-hint>
+                </mat-form-field>
+
+                <!-- Botão Submit -->
+                <div class="form-actions">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    [disabled]="isSubmitting"
+                    class="submit-button">
+                    <mat-spinner diameter="20" *ngIf="isSubmitting" class="spinner"></mat-spinner>
+                    <mat-icon *ngIf="!isSubmitting">send</mat-icon>
+                    {{ isSubmitting ? 'Enviando...' : 'Enviar Mensagem' }}
+                  </button>
+                </div>
+
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Mapa (opcional) -->
+  <section class="map-section">
+    <div class="container">
+      <mat-card class="map-card">
+        <mat-card-header>
+          <mat-card-title>Localização</mat-card-title>
+          <mat-card-subtitle>Nosso escritório fica no coração de São Paulo</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="map-placeholder">
+            <mat-icon>location_on</mat-icon>
+            <p>Av. Paulista, 1000 - Bela Vista, São Paulo - SP</p>
+            <button mat-stroked-button color="primary" onclick="window.open('https://maps.google.com', '_blank')">
+              <mat-icon>directions</mat-icon>
+              Ver no Google Maps
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- FAQ Rápido -->
+  <section class="faq-quick">
+    <div class="container">
+      <h2>Perguntas Frequentes</h2>
+      <div class="faq-grid">
+        <mat-card>
+          <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">help</mat-icon>
+            <mat-card-title>Quanto custa uma consulta?</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>A primeira consulta é gratuita. Nela, avalio seu caso e apresento as opções jurídicas disponíveis.</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">schedule</mat-icon>
+            <mat-card-title>Quanto tempo leva um processo?</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Depende da complexidade do caso. Em média, processos trabalhistas levam de 1 a 2 anos.</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">payment</mat-icon>
+            <mat-card-title>Como funciona o pagamento?</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Trabalho com honorários contratuais ou êxito, dependendo do caso. Tudo é acordado com transparência.</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">laptop</mat-icon>
+            <mat-card-title>Posso acompanhar online?</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Sim! Oferecemos plataforma digital exclusiva para clientes acompanharem processos em tempo real.</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+
+</div>
+

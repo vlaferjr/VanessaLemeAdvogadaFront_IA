@@ -1,0 +1,589 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.landing-page {
+  background: $background-white;
+}
+
+// Hero Section - Mais Profissional
+.hero {
+  background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
+  color: white;
+  padding: 100px 0 80px;
+
+  @media (max-width: 600px) {
+    padding: 80px 0 60px;
+  }
+}
+
+.hero-container {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 60px;
+  align-items: center;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.hero-content {
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 24px;
+
+    .highlight {
+      color: $accent-color;
+    }
+
+    @media (max-width: 960px) {
+      font-size: 2.8rem;
+    }
+
+    @media (max-width: 600px) {
+      font-size: 2.2rem;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    margin-bottom: 32px;
+    opacity: 0.95;
+    max-width: 600px;
+
+    @media (max-width: 600px) {
+      font-size: 1.1rem;
+    }
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+
+    button {
+      padding: 14px 32px;
+      font-size: 1rem;
+      font-weight: 500;
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+
+    .cta-primary {
+      background-color: $accent-color;
+      color: white;
+    }
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      width: 100%;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+
+  .credentials {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+
+    .credential-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px 16px;
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+
+      mat-icon {
+        color: $accent-color;
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
+
+      div {
+        display: flex;
+        flex-direction: column;
+
+        strong {
+          font-size: 0.95rem;
+          font-weight: 600;
+        }
+
+        span {
+          font-size: 0.8rem;
+          opacity: 0.8;
+        }
+      }
+    }
+
+    @media (max-width: 600px) {
+      .credential-badge {
+        flex: 1 1 calc(50% - 12px);
+        min-width: 150px;
+      }
+    }
+  }
+}
+
+.hero-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .image-placeholder {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+
+    mat-icon {
+      font-size: 120px;
+      width: 120px;
+      height: 120px;
+      color: $accent-color;
+      opacity: 0.8;
+    }
+  }
+
+  @media (max-width: 960px) {
+    display: none;
+  }
+}
+
+// Section Header Padrão
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+
+  .section-tag {
+    display: inline-block;
+    background: $accent-color;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: $text-primary;
+
+    @media (max-width: 600px) {
+      font-size: 2rem;
+    }
+  }
+
+  p {
+    font-size: 1.125rem;
+    color: $text-secondary;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+}
+
+// Áreas de Atuação
+.practice-areas {
+  padding: 100px 0;
+  background: $background-light;
+
+  @media (max-width: 600px) {
+    padding: 60px 0;
+  }
+}
+
+.areas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.area-card {
+  padding: 40px 32px;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-8px);
+    @include elevation(3);
+  }
+
+  &.featured {
+    border: 2px solid $accent-color;
+
+    &::before {
+      content: 'DESTAQUE';
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: $accent-color;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+  }
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 24px;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: $text-primary;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      padding: 10px 0;
+      color: $text-secondary;
+      position: relative;
+      padding-left: 24px;
+      line-height: 1.6;
+
+      &::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: $accent-color;
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+// Diferenciais
+.differentials {
+  padding: 100px 0;
+
+  @media (max-width: 600px) {
+    padding: 60px 0;
+  }
+}
+
+.differentials-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+
+  @media (max-width: 1280px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.differential-item {
+  text-align: center;
+
+  .icon-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    background: lighten($accent-color, 35%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: $text-primary;
+  }
+
+  p {
+    color: $text-secondary;
+    line-height: 1.6;
+  }
+}
+
+// Como Funciona
+.how-it-works {
+  padding: 100px 0;
+  background: $background-light;
+
+  @media (max-width: 600px) {
+    padding: 60px 0;
+  }
+}
+
+.steps {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.step {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 48px;
+  position: relative;
+
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 30px;
+    top: 80px;
+    width: 2px;
+    height: calc(100% - 20px);
+    background: $divider-color;
+
+    @media (max-width: 600px) {
+      display: none;
+    }
+  }
+
+  .step-number {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    background: $primary-color;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-content {
+    flex: 1;
+    padding-top: 8px;
+
+    h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: $text-primary;
+    }
+
+    p {
+      color: $text-secondary;
+      line-height: 1.7;
+    }
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+}
+
+// Localização
+.location {
+  padding: 100px 0;
+
+  @media (max-width: 600px) {
+    padding: 60px 0;
+  }
+}
+
+.location-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.location-info {
+  .location-description {
+    font-size: 1.125rem;
+    color: $text-secondary;
+    line-height: 1.7;
+    margin: 24px 0 40px;
+  }
+
+  .contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 40px;
+
+    .contact-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+
+      mat-icon {
+        color: $accent-color;
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
+
+      div {
+        strong {
+          display: block;
+          font-size: 1rem;
+          margin-bottom: 4px;
+          color: $text-primary;
+        }
+
+        p {
+          color: $text-secondary;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  button {
+    padding: 14px 32px;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+.location-map {
+  .map-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: $background-light;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed $divider-color;
+
+    mat-icon {
+      font-size: 80px;
+      width: 80px;
+      height: 80px;
+      color: $accent-color;
+      margin-bottom: 16px;
+    }
+
+    p {
+      color: $text-secondary;
+      font-size: 1.125rem;
+    }
+  }
+}
+
+// CTA Final
+.cta-final {
+  padding: 100px 0;
+  background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
+  color: white;
+
+  @media (max-width: 600px) {
+    padding: 60px 0;
+  }
+}
+
+.cta-content {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+
+    @media (max-width: 600px) {
+      font-size: 2rem;
+    }
+  }
+
+  p {
+    font-size: 1.25rem;
+    opacity: 0.95;
+    margin-bottom: 40px;
+  }
+
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    button {
+      padding: 14px 32px;
+      font-size: 1rem;
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+
+    .btn-whatsapp {
+      background: #25d366;
+      color: white;
+      border: none;
+
+      &:hover {
+        background: darken(#25d366, 10%);
+      }
+    }
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      width: 100%;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

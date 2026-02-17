@@ -1,5 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
 @use "@angular/material" as mat;
+@import './app/styles/variables';
+@import './app/styles/mixins';
+
+/* You can add global styles to this file, and also import other style files */
 
 // Custom Material palettes (brand-forward, warm legal aesthetic).
 $vanessa-primary: mat.define-palette(mat.$indigo-palette, 700, 500, 900);
@@ -30,6 +33,43 @@ html, body { height: 100%; }
 body {
   margin: 0;
   font-family: "Poppins", "Roboto", "Helvetica Neue", sans-serif;
-  background: #faf7f2;
+  background: #fafafa;
   color: #1f1b16;
+  height: 100%;
+}
+
+// Container padrão responsivo
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+
+  @media (min-width: 600px) {
+    padding: 0 24px;
+  }
+
+  @media (min-width: 960px) {
+    padding: 0 32px;
+  }
+}
+
+// Spacer
+.spacer {
+  flex: 1 1 auto;
+}
+
+// Botões responsivos
+.btn-group-responsive {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
 }

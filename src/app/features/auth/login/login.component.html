@@ -1,0 +1,137 @@
+<div class="login-page">
+  <div class="login-container">
+
+    <!-- Lado Esquerdo: Branding -->
+    <div class="login-brand">
+      <div class="brand-content">
+        <div class="brand-logo">
+          <mat-icon color="primary">gavel</mat-icon>
+        </div>
+        <h1>Vanessa Leme Advocacia</h1>
+        <p class="brand-subtitle">
+          Portal do Cliente - Acompanhe seus processos em tempo real
+        </p>
+
+        <div class="brand-features">
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Atualizações automáticas do TRT</span>
+          </div>
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Notificações via Telegram</span>
+          </div>
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Agendamento de consultas online</span>
+          </div>
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Histórico completo de movimentações</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lado Direito: Formulário -->
+    <div class="login-form">
+      <mat-card class="login-card">
+        <mat-card-header>
+          <mat-card-title>Bem-vindo de volta!</mat-card-title>
+          <mat-card-subtitle>Entre com suas credenciais</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+            <!-- E-mail -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>E-mail</mat-label>
+              <input
+                matInput
+                type="email"
+                formControlName="email"
+                placeholder="seu@email.com"
+                autocomplete="email">
+              <mat-icon matPrefix>email</mat-icon>
+              <mat-error *ngIf="email?.invalid && email?.touched">
+                {{ getErrorMessage('email') }}
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Senha -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Senha</mat-label>
+              <input
+                matInput
+                [type]="hidePassword ? 'password' : 'text'"
+                formControlName="password"
+                placeholder="Digite sua senha"
+                autocomplete="current-password">
+              <mat-icon matPrefix>lock</mat-icon>
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="hidePassword = !hidePassword"
+                [attr.aria-label]="'Ocultar senha'"
+                [attr.aria-pressed]="hidePassword">
+                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-error *ngIf="password?.invalid && password?.touched">
+                {{ getErrorMessage('password') }}
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Lembrar-me / Esqueci senha -->
+            <div class="form-options">
+              <mat-checkbox formControlName="rememberMe" color="primary">
+                Manter-me conectado
+              </mat-checkbox>
+              <a routerLink="/auth/forgot-password" class="forgot-link">
+                Esqueci minha senha
+              </a>
+            </div>
+
+            <!-- Botão Login -->
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="isLoading"
+              class="login-button">
+              <mat-spinner diameter="20" *ngIf="isLoading" class="spinner"></mat-spinner>
+              <mat-icon *ngIf="!isLoading">login</mat-icon>
+              {{ isLoading ? 'Entrando...' : 'Entrar' }}
+            </button>
+
+          </form>
+
+          <!-- Divider -->
+          <div class="divider">
+            <span>ou</span>
+          </div>
+
+          <!-- Primeira vez -->
+          <div class="first-time">
+            <p>Primeira vez aqui?</p>
+            <button mat-stroked-button color="accent" routerLink="/contato">
+              <mat-icon>contact_mail</mat-icon>
+              Solicitar Acesso
+            </button>
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Link para voltar -->
+      <div class="back-link">
+        <button mat-button routerLink="/">
+          <mat-icon>arrow_back</mat-icon>
+          Voltar para o site
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

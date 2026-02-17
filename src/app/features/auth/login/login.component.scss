@@ -1,0 +1,238 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 16px;
+}
+
+.login-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1000px;
+  width: 100%;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  @include elevation(3);
+
+  @include respond-to('xs') {
+    grid-template-columns: 1fr;
+  }
+
+  @include respond-to('sm') {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Branding (lado esquerdo)
+.login-brand {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 64px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @include respond-to('xs') {
+    display: none;
+  }
+
+  @include respond-to('sm') {
+    display: none;
+  }
+
+  .brand-content {
+    .brand-logo {
+      mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        margin-bottom: 24px;
+      }
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .brand-subtitle {
+      font-size: 1.125rem;
+      opacity: 0.9;
+      margin-bottom: 48px;
+      line-height: 1.6;
+    }
+
+    .brand-features {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        mat-icon {
+          color: #ffd700;
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
+
+        span {
+          font-size: 0.95rem;
+          opacity: 0.95;
+        }
+      }
+    }
+  }
+}
+
+// Formulário (lado direito)
+.login-form {
+  padding: 64px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @include respond-to('xs') {
+    padding: 48px 24px;
+  }
+
+  .login-card {
+    box-shadow: none !important;
+
+    mat-card-header {
+      margin-bottom: 32px;
+
+      mat-card-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: $text-primary;
+      }
+
+      mat-card-subtitle {
+        font-size: 1rem;
+        color: $text-secondary;
+        margin-top: 8px;
+      }
+    }
+
+    mat-card-content {
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .full-width {
+          width: 100%;
+        }
+
+        .form-options {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 8px;
+
+          @include respond-to('xs') {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+          }
+
+          .forgot-link {
+            color: $primary-color;
+            text-decoration: none;
+            font-size: 0.875rem;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+
+        .login-button {
+          width: 100%;
+          padding: 12px 0;
+          font-size: 1rem;
+          margin-top: 8px;
+
+          .spinner {
+            margin-right: 8px;
+            display: inline-block;
+          }
+
+          mat-icon {
+            margin-right: 8px;
+          }
+        }
+      }
+
+      .divider {
+        position: relative;
+        text-align: center;
+        margin: 32px 0;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: $divider-color;
+        }
+
+        span {
+          position: relative;
+          background: white;
+          padding: 0 16px;
+          color: $text-secondary;
+          font-size: 0.875rem;
+        }
+      }
+
+      .first-time {
+        text-align: center;
+
+        p {
+          color: $text-secondary;
+          margin-bottom: 16px;
+        }
+
+        button {
+          width: 100%;
+          padding: 12px 0;
+
+          mat-icon {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+  }
+
+  .back-link {
+    text-align: center;
+    margin-top: 24px;
+
+    button {
+      color: $text-secondary;
+
+      mat-icon {
+        margin-right: 8px;
+      }
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
+  }
+}

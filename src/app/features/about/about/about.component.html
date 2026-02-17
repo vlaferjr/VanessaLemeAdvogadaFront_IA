@@ -1,0 +1,99 @@
+<div class="about-page">
+  <!-- Hero Sobre -->
+  <section class="about-hero">
+    <div class="container">
+      <h1>Sobre Vanessa Leme</h1>
+      <p class="subtitle">
+        Advogada especializada em Direito do Trabalho, comprometida com a defesa dos seus direitos
+      </p>
+    </div>
+  </section>
+
+  <!-- Apresentação -->
+  <section class="presentation">
+    <div class="container">
+      <mat-card class="presentation-card">
+        <div class="presentation-content">
+          <div class="presentation-image">
+            <mat-icon color="primary">account_circle</mat-icon>
+          </div>
+          <div class="presentation-text">
+            <h2>Dra. Vanessa Leme</h2>
+            <p class="role">OAB/SP XXXXX | Especialista em Direito do Trabalho</p>
+            <p class="bio">
+              Com mais de 10 anos de experiência na advocacia trabalhista, dedico-me a oferecer
+              um atendimento personalizado e humanizado, aliando expertise jurídica à inovação tecnológica.
+            </p>
+            <p class="bio">
+              Minha missão é garantir que cada cliente tenha acesso facilitado à justiça, com total
+              transparência no acompanhamento dos seus processos através da nossa plataforma digital exclusiva.
+            </p>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- Valores -->
+  <section class="values">
+    <div class="container">
+      <h2 class="section-title">Valores e Princípios</h2>
+      <div class="values-grid">
+        <mat-card class="value-card">
+          <mat-icon color="primary">verified</mat-icon>
+          <h3>Ética</h3>
+          <p>Atuação pautada pela honestidade, transparência e compromisso com a verdade.</p>
+        </mat-card>
+
+        <mat-card class="value-card">
+          <mat-icon color="primary">psychology</mat-icon>
+          <h3>Excelência</h3>
+          <p>Busca constante pelo aprimoramento técnico e atualização jurídica.</p>
+        </mat-card>
+
+        <mat-card class="value-card">
+          <mat-icon color="primary">favorite</mat-icon>
+          <h3>Humanização</h3>
+          <p>Atendimento acolhedor que respeita a individualidade de cada cliente.</p>
+        </mat-card>
+
+        <mat-card class="value-card">
+          <mat-icon color="primary">lightbulb</mat-icon>
+          <h3>Inovação</h3>
+          <p>Uso de tecnologia para facilitar o acesso à informação e agilizar processos.</p>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section class="timeline-section">
+    <div class="container">
+      <h2 class="section-title">Trajetória Profissional</h2>
+      <div class="timeline">
+        <div class="timeline-item" *ngFor="let item of timeline; let i = index" [class.right]="i % 2 !== 0">
+          <mat-card class="timeline-card">
+            <div class="timeline-year">{{ item.year }}</div>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-about">
+    <div class="container">
+      <mat-card class="cta-card">
+        <h2>Vamos conversar sobre o seu caso?</h2>
+        <p>Entre em contato e agende uma consulta sem compromisso</p>
+        <button mat-raised-button color="primary" routerLink="/contato">
+          <mat-icon>phone</mat-icon>
+          Entrar em Contato
+        </button>
+      </mat-card>
+    </div>
+  </section>
+</div>
+

@@ -1,0 +1,20 @@
+@use '@angular/material' as mat;
+
+// Define paleta customizada
+$custom-primary: mat.define-palette(mat.$indigo-palette, 900, 800, A700);
+$custom-accent: mat.define-palette(mat.$amber-palette, 700, 600, 800);
+$custom-warn: mat.define-palette(mat.$red-palette);
+
+// Cria tema
+$custom-theme: mat.define-light-theme((
+  color: (
+    primary: $custom-primary,
+    accent: $custom-accent,
+    warn: $custom-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+// Aplica tema
+@include mat.all-component-themes($custom-theme);

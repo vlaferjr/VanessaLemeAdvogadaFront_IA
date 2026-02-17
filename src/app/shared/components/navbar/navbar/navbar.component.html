@@ -1,0 +1,104 @@
+<mat-toolbar color="primary" class="navbar">
+  <!-- Menu hamburguer (mobile) -->
+  <button
+    mat-icon-button
+    class="menu-button"
+    (click)="toggleMobileMenu()"
+    *ngIf="isHandset$ | async">
+    <mat-icon>{{ mobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
+  </button>
+
+  <!-- Logo -->
+  <span class="logo" routerLink="/" (click)="closeMobileMenu()">
+    <mat-icon class="logo-icon">gavel</mat-icon>
+    <span class="logo-text">Vanessa Leme</span>
+  </span>
+
+  <span class="spacer"></span>
+
+  <!-- Menu desktop -->
+  <nav class="nav-links" *ngIf="!(isHandset$ | async)">
+    <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      Início
+    </a>
+    <a mat-button routerLink="/sobre" routerLinkActive="active">
+      Sobre
+    </a>
+    <a mat-button routerLink="/atuacao" routerLinkActive="active">
+      Atuação
+    </a>
+    <a mat-button routerLink="/contato" routerLinkActive="active">
+      Contato
+    </a>
+
+    <ng-container *ngIf="!(isAuthenticated$ | async); else loggedInButtons">
+      <button mat-stroked-button color="accent" routerLink="/auth/login">
+        Entrar
+      </button>
+    </ng-container>
+
+    <ng-template #loggedInButtons>
+      <button mat-button routerLink="/dashboard">
+        <mat-icon>dashboard</mat-icon>
+        Painel
+      </button>
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item routerLink="/dashboard/perfil">
+          <mat-icon>person</mat-icon>
+          Meu Perfil
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          Sair
+        </button>
+      </mat-menu>
+    </ng-template>
+  </nav>
+</mat-toolbar>
+
+<!-- Menu mobile (drawer) -->
+<mat-nav-list class="mobile-menu" *ngIf="mobileMenuOpen && (isHandset$ | async)">
+  <a mat-list-item routerLink="/" (click)="closeMobileMenu()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+    <mat-icon matListItemIcon>home</mat-icon>
+    <span matListItemTitle>Início</span>
+  </a>
+  <a mat-list-item routerLink="/sobre" (click)="closeMobileMenu()" routerLinkActive="active">
+    <mat-icon matListItemIcon>info</mat-icon>
+    <span matListItemTitle>Sobre</span>
+  </a>
+  <a mat-list-item routerLink="/atuacao" (click)="closeMobileMenu()" routerLinkActive="active">
+    <mat-icon matListItemIcon>work</mat-icon>
+    <span matListItemTitle>Atuação</span>
+  </a>
+  <a mat-list-item routerLink="/contato" (click)="closeMobileMenu()" routerLinkActive="active">
+    <mat-icon matListItemIcon>contact_mail</mat-icon>
+    <span matListItemTitle>Contato</span>
+  </a>
+
+  <mat-divider></mat-divider>
+
+  <ng-container *ngIf="!(isAuthenticated$ | async); else mobileLoggedIn">
+    <a mat-list-item routerLink="/auth/login" (click)="closeMobileMenu()">
+      <mat-icon matListItemIcon>login</mat-icon>
+      <span matListItemTitle>Entrar</span>
+    </a>
+  </ng-container>
+
+  <ng-template #mobileLoggedIn>
+    <a mat-list-item routerLink="/dashboard" (click)="closeMobileMenu()">
+      <mat-icon matListItemIcon>dashboard</mat-icon>
+      <span matListItemTitle>Painel</span>
+    </a>
+    <a mat-list-item routerLink="/dashboard/perfil" (click)="closeMobileMenu()">
+      <mat-icon matListItemIcon>person</mat-icon>
+      <span matListItemTitle>Meu Perfil</span>
+    </a>
+    <a mat-list-item (click)="logout()">
+      <mat-icon matListItemIcon>exit_to_app</mat-icon>
+      <span matListItemTitle>Sair</span>
+    </a>
+  </ng-template>
+</mat-nav-list>
