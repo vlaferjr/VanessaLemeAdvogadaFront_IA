@@ -2,16 +2,17 @@
 @import '../../../../styles/mixins';
 
 .navbar {
+  background-color: #424242;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  height: 64px;
+  height: 100px;
   @include elevation(2);
 
   @media (max-width: 600px) {
-    height: 56px;
+    height: 65px;
   }
 }
 
@@ -20,7 +21,14 @@
 }
 
 .logo {
-  display: flex;
+  img {
+    height: auto;
+    width: 15vw;
+    @media (max-width: 600px) {
+      width: 75vw;
+    }
+  }
+  /*display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
@@ -39,7 +47,7 @@
     @media (max-width: 400px) {
       display: none;
     }
-  }
+  }*/
 }
 
 .nav-links {
