@@ -21,22 +21,22 @@ export class ContactComponent implements OnInit{
 
   contactInfo: ContactInfo[] = [
     {
-      icon: 'phone',
-      title: 'Telefone',
-      value: '(11) 9XXXX-XXXX',
-      link: 'tel:+5511900000000'
+      icon: 'whatsapp',
+      title: 'WhatsApp',
+      value: '(11) 98204-5906',
+      link: 'https://wa.me/5511982045906?text=Ol%C3%A1%20tudo%20bem%3F%20Gostaria%20de%20tirar%20mais%20d%C3%BAvidas%20sobre%20o%20seu%20trabalho'
     },
     {
       icon: 'email',
       title: 'E-mail',
-      value: 'contato@vanessaleme.adv.br',
-      link: 'mailto:contato@vanessaleme.adv.br'
+      value: 'advanessaferrari@gmail.com',
+      link: 'mailto:advanessaferrari@gmail.com?subject=Ol%C3%A1%20Vanessa%2C%20vi%20seu%20portal%20e%20gostaria%20de%20tirar%20mais%20d%C3%BAvidas&body=Ol%C3%A1%20Vanessa%2C%20tudo%20bem%3F%0D%0AMinha%20d%C3%BAvida%20%C3%A9%20a%20seguinte'
     },
     {
       icon: 'location_on',
       title: 'Endereço',
-      value: 'Av. Paulista, 1000 - São Paulo/SP',
-      link: 'https://maps.google.com'
+      value: 'Centro - Guarulhos/SP',
+      link: 'https://www.google.com/maps/search/?api=1&query=F%C3%B3rum%20Trabalhista%20de%20Guarulhos'
     },
     {
       icon: 'schedule',

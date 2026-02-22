@@ -2,7 +2,7 @@
   <!-- Hero Sobre -->
   <section class="about-hero">
     <div class="container">
-      <h1>Sobre Vanessa Leme</h1>
+      <h1>Sobre <span class="highlight">Vanessa Leme Ferrari</span></h1>
       <p class="subtitle">
         Advogada especializada em Direito do Trabalho, comprometida com a defesa dos seus direitos
       </p>
@@ -15,18 +15,26 @@
       <mat-card class="presentation-card">
         <div class="presentation-content">
           <div class="presentation-image">
-            <mat-icon color="primary">account_circle</mat-icon>
+            <img src="../../../../../../assets/vanessa_leme_ferrari_perfil.jpg" alt="Foto da Dra. Vanessa Leme Ferrari" class="profile-photo">
           </div>
           <div class="presentation-text">
-            <h2>Dra. Vanessa Leme</h2>
-            <p class="role">OAB/SP XXXXX | Especialista em Direito do Trabalho</p>
+            <h2>Dra. Vanessa Leme Ferrari</h2>
+            <p class="role">OAB/SP 279424 | Especialista em Direito do Trabalho</p>
             <p class="bio">
-              Com mais de 10 anos de experiência na advocacia trabalhista, dedico-me a oferecer
-              um atendimento personalizado e humanizado, aliando expertise jurídica à inovação tecnológica.
+              Com mais de 15 anos de experiência na advocacia trabalhista, com vasto conhecimento jurídico,
+              sou uma defensora em quem você pode confiar para proteger seus direitos e interesses.
             </p>
             <p class="bio">
-              Minha missão é garantir que cada cliente tenha acesso facilitado à justiça, com total
-              transparência no acompanhamento dos seus processos através da nossa plataforma digital exclusiva.
+              Especialista nas áreas Trabalhista e de Família, atuo com profissionalismo e empatia,
+              garantindo a melhor orientação jurídica para cada caso.
+            </p>
+            <p class="bio">
+              Conto com parcerias estratégicas para oferecer suporte especializado nas áreas Previdenciária,
+              Civil e de Defesa do Consumidor, proporcionando um atendimento completo e personalizado para cada cliente.
+            </p>
+            <p class="bio">
+              Seja para resolver questões trabalhistas, proteger seus direitos familiares ou buscar soluções jurídicas eficazes,
+              me sinto pronta para oferecer a melhor assessoria jurídica com compromisso e transparência.
             </p>
           </div>
         </div>
@@ -65,35 +73,4 @@
       </div>
     </div>
   </section>
-
-  <!-- Timeline -->
-  <section class="timeline-section">
-    <div class="container">
-      <h2 class="section-title">Trajetória Profissional</h2>
-      <div class="timeline">
-        <div class="timeline-item" *ngFor="let item of timeline; let i = index" [class.right]="i % 2 !== 0">
-          <mat-card class="timeline-card">
-            <div class="timeline-year">{{ item.year }}</div>
-            <h3>{{ item.title }}</h3>
-            <p>{{ item.description }}</p>
-          </mat-card>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="cta-about">
-    <div class="container">
-      <mat-card class="cta-card">
-        <h2>Vamos conversar sobre o seu caso?</h2>
-        <p>Entre em contato e agende uma consulta sem compromisso</p>
-        <button mat-raised-button color="primary" routerLink="/contato">
-          <mat-icon>phone</mat-icon>
-          Entrar em Contato
-        </button>
-      </mat-card>
-    </div>
-  </section>
-</div>
 

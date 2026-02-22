@@ -317,6 +317,7 @@
 // Diferenciais
 .differentials {
   padding: 100px 0;
+  //background-image: url('../../../../../assets/bg_advogados.jpg');
 
   @media (max-width: 600px) {
     padding: 60px 0;
@@ -463,6 +464,7 @@
 
   @media (max-width: 960px) {
     grid-template-columns: 1fr;
+    gap: 0px;
   }
 }
 
@@ -504,109 +506,6 @@
           color: $text-secondary;
           margin: 0;
         }
-      }
-    }
-  }
-
-  button {
-    padding: 14px 32px;
-
-    mat-icon {
-      margin-right: 8px;
-    }
-  }
-}
-
-.location-map {
-  .map-placeholder {
-    width: 100%;
-    aspect-ratio: 4/3;
-    background: $background-light;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed $divider-color;
-
-    mat-icon {
-      font-size: 80px;
-      width: 80px;
-      height: 80px;
-      color: $accent-color;
-      margin-bottom: 16px;
-    }
-
-    p {
-      color: $text-secondary;
-      font-size: 1.125rem;
-    }
-  }
-}
-
-// CTA Final
-.cta-final {
-  padding: 100px 0;
-  background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
-  color: white;
-
-  @media (max-width: 600px) {
-    padding: 60px 0;
-  }
-}
-
-.cta-content {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-
-  h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-
-    @media (max-width: 600px) {
-      font-size: 2rem;
-    }
-  }
-
-  p {
-    font-size: 1.25rem;
-    opacity: 0.95;
-    margin-bottom: 40px;
-  }
-
-  .cta-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
-
-    button {
-      padding: 14px 32px;
-      font-size: 1rem;
-
-      mat-icon {
-        margin-right: 8px;
-      }
-    }
-
-    .btn-whatsapp {
-      background: #25d366;
-      color: white;
-      border: none;
-
-      &:hover {
-        background: darken(#25d366, 10%);
-      }
-    }
-
-    @media (max-width: 600px) {
-      flex-direction: column;
-      width: 100%;
-
-      button {
-        width: 100%;
       }
     }
   }

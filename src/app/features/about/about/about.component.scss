@@ -2,10 +2,25 @@
 @import '../../../styles/mixins';
 
 .about-hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #3f4248;;
+  background-image:
+    linear-gradient(135deg, #2f3237 0%, #4b4f56 45%, #2a2d32 100%),
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.06) 0,
+      rgba(255, 255, 255, 0.06) 2px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0) 10px
+    );
+  background-size: cover;
+  background-blend-mode: overlay;
   color: white;
   padding: 120px 0 60px;
   text-align: center;
+
+  .highlight {
+      color: $accent-color;
+    }
 
   @media (max-width: 600px) {
     padding: 80px 0 40px;
@@ -56,10 +71,17 @@
 }
 
 .presentation-image {
+  text-align: end;
   mat-icon {
     font-size: 180px;
     width: 180px;
     height: 180px;
+  }
+
+  img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
   }
 
   @include respond-to('xs') {
@@ -146,125 +168,5 @@
   p {
     color: $text-secondary;
     line-height: 1.6;
-  }
-}
-
-.timeline-section {
-  padding: 80px 0;
-
-  @media (max-width: 600px) {
-    padding: 48px 0;
-  }
-}
-
-.timeline {
-  position: relative;
-  max-width: 800px;
-  margin: 0 auto;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 100%;
-    background: $divider-color;
-
-    @include respond-to('xs') {
-      left: 20px;
-    }
-  }
-}
-
-.timeline-item {
-  margin-bottom: 48px;
-  position: relative;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  .timeline-card {
-    width: calc(50% - 40px);
-    margin-left: auto;
-    @include elevation(2);
-
-    @include respond-to('xs') {
-      width: calc(100% - 60px);
-      margin-left: 60px;
-    }
-  }
-
-  &.right .timeline-card {
-    margin-left: 0;
-    margin-right: auto;
-
-    @include respond-to('xs') {
-      margin-left: 60px;
-      margin-right: 0;
-    }
-  }
-
-  .timeline-year {
-    display: inline-block;
-    background: $primary-color;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    margin-bottom: 12px;
-  }
-
-  h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: $text-primary;
-  }
-
-  p {
-    color: $text-secondary;
-    line-height: 1.6;
-  }
-}
-
-.cta-about {
-  padding: 80px 0;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-
-  @media (max-width: 600px) {
-    padding: 48px 0;
-  }
-}
-
-.cta-card {
-  text-align: center;
-  padding: 48px 32px;
-
-  h2 {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 16px;
-    color: $text-primary;
-
-    @media (max-width: 600px) {
-      font-size: 1.5rem;
-    }
-  }
-
-  p {
-    font-size: 1.125rem;
-    color: $text-secondary;
-    margin-bottom: 32px;
-  }
-
-  button {
-    padding: 12px 32px;
-    font-size: 1rem;
-
-    mat-icon {
-      margin-right: 8px;
-    }
   }
 }
