@@ -19,13 +19,22 @@
 
   <!-- Menu desktop -->
   <nav class="nav-links" *ngIf="!(isHandset$ | async)">
-    <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+    <a
+      mat-button
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{paths: 'exact', fragment: 'exact', queryParams: 'ignored', matrixParams: 'ignored'}">
       Início
     </a>
     <a mat-button routerLink="/sobre" routerLinkActive="active">
       Sobre
     </a>
-    <a mat-button routerLink="/atuacao" routerLinkActive="active">
+    <a
+      mat-button
+      routerLink="/"
+      fragment="atuacao"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{paths: 'exact', fragment: 'exact', queryParams: 'ignored', matrixParams: 'ignored'}">
       Atuação
     </a>
     <a mat-button routerLink="/contato" routerLinkActive="active">
@@ -62,7 +71,12 @@
 
 <!-- Menu mobile (drawer) -->
 <mat-nav-list class="mobile-menu" *ngIf="mobileMenuOpen && (isHandset$ | async)">
-  <a mat-list-item routerLink="/" (click)="closeMobileMenu()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+  <a
+    mat-list-item
+    routerLink="/"
+    (click)="closeMobileMenu()"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{paths: 'exact', fragment: 'exact', queryParams: 'ignored', matrixParams: 'ignored'}">
     <mat-icon matListItemIcon>home</mat-icon>
     <span matListItemTitle>Início</span>
   </a>
@@ -70,7 +84,13 @@
     <mat-icon matListItemIcon>info</mat-icon>
     <span matListItemTitle>Sobre</span>
   </a>
-  <a mat-list-item routerLink="/atuacao" (click)="closeMobileMenu()" routerLinkActive="active">
+  <a
+    mat-list-item
+    routerLink="/"
+    fragment="atuacao"
+    (click)="closeMobileMenu()"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{paths: 'exact', fragment: 'exact', queryParams: 'ignored', matrixParams: 'ignored'}">
     <mat-icon matListItemIcon>work</mat-icon>
     <span matListItemTitle>Atuação</span>
   </a>
@@ -103,3 +123,5 @@
     </a>
   </ng-template>
 </mat-nav-list>
+
+

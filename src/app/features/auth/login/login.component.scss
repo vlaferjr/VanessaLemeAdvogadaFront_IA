@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #f8f9fa;
   padding: 16px;
 }
 
@@ -29,11 +29,25 @@
   }
 }
 
+.highlight {
+    color: $accent-color;
+  }
+
 // Branding (lado esquerdo)
 .login-brand {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-image:
+    linear-gradient(135deg, #2f3237 0%, #4b4f56 45%, #2a2d32 100%),
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.06) 0,
+      rgba(255, 255, 255, 0.06) 2px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0) 10px
+    );
+  background-size: cover;
+  background-blend-mode: overlay;
   color: white;
-  padding: 64px 48px;
+  padding: 64px 45px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -47,21 +61,6 @@
   }
 
   .brand-content {
-    .brand-logo {
-      mat-icon {
-        font-size: 64px;
-        width: 64px;
-        height: 64px;
-        margin-bottom: 24px;
-      }
-    }
-
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
     .brand-subtitle {
       font-size: 1.125rem;
       opacity: 0.9;
@@ -84,10 +83,11 @@
           font-size: 24px;
           width: 24px;
           height: 24px;
+          display: contents;
         }
 
         span {
-          font-size: 0.95rem;
+          font-size: 0.75rem;
           opacity: 0.95;
         }
       }
