@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ContactService } from 'src/app/core/services/contact.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 interface ContactInfo {
   icon: string;
@@ -14,10 +17,11 @@ interface ContactInfo {
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })
-export class ContactComponent implements OnInit{
+export class ContactComponent implements OnInit, OnDestroy {
 
   contactForm: FormGroup;
   isSubmitting = false;
+  private destroy$ = new Subject<void>();
 
   contactInfo: ContactInfo[] = [
     {
@@ -47,18 +51,24 @@ export class ContactComponent implements OnInit{
 
   constructor(
     private fb: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private contactService: ContactService
   ) {
     this.contactForm = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
+      telefone: ['', [Validators.required, Validators.pattern(/^(\(?\d{2}\)?)\s?9?\d{4}-?\d{4}$/)]],
       assunto: ['', [Validators.required]],
       mensagem: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   // Getters para validação
   get nome() { return this.contactForm.get('nome'); }
@@ -67,7 +77,9 @@ export class ContactComponent implements OnInit{
   get assunto() { return this.contactForm.get('assunto'); }
   get mensagem() { return this.contactForm.get('mensagem'); }
 
-  // Máscara de telefone
+  /**
+   * Máscara de telefone
+   */
   onTelefoneInput(event: any): void {
     let valor = event.target.value.replace(/\D/g, '');
 
@@ -84,7 +96,9 @@ export class ContactComponent implements OnInit{
     this.contactForm.patchValue({ telefone: valor }, { emitEvent: false });
   }
 
-  // Submit do formulário
+  /**
+   * Submit do formulário
+   */
   onSubmit(): void {
     if (this.contactForm.invalid) {
       this.contactForm.markAllAsTouched();
@@ -98,23 +112,58 @@ export class ContactComponent implements OnInit{
     }
 
     this.isSubmitting = true;
+    const dados = this.contactForm.value;
 
-    // Simula envio (aqui você integraria com EmailJS ou backend)
-    setTimeout(() => {
-      this.isSubmitting = false;
+    // Remove máscara do telefone para enviar ao backend
+    dados.telefone = dados.telefone.replace(/\D/g, '');
 
-      this.snackBar.open('Mensagem enviada com sucesso! Retornaremos em breve.', 'Fechar', {
-        duration: 5000,
-        horizontalPosition: 'end',
-        verticalPosition: 'top',
-        panelClass: ['success-snackbar']
+    this.contactService.enviarContato(dados)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+
+          this.snackBar.open('Mensagem enviada com sucesso! Retornaremos em breve.', 'Fechar', {
+            duration: 5000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar']
+          });
+
+          this.contactForm.reset();
+        },
+        error: (error) => {
+          this.isSubmitting = false;
+
+          let errorMessage = 'Erro ao enviar mensagem. Tente novamente.';
+
+          if (error.error?.message) {
+            errorMessage = error.error.message;
+          } else if (error.error?.errors) {
+            errorMessage = Object.values(error.error.errors).join(', ');
+          } else if (error.status === 0) {
+            errorMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão.';
+          } else if (error.status === 400) {
+            errorMessage = 'Dados inválidos. Verifique o formulário.';
+          } else if (error.status === 500) {
+            errorMessage = 'Erro no servidor. Tente novamente mais tarde.';
+          }
+
+          this.snackBar.open(errorMessage, 'Fechar', {
+            duration: 5000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+            panelClass: ['error-snackbar']
+          });
+
+          console.error('Erro ao enviar contato:', error);
+        }
       });
-
-      this.contactForm.reset();
-    }, 2000);
   }
 
-  // Obter mensagem de erro
+  /**
+   * Obter mensagem de erro
+   */
   getErrorMessage(field: string): string {
     const control = this.contactForm.get(field);
 
@@ -135,10 +184,9 @@ export class ContactComponent implements OnInit{
     }
 
     if (control.errors['pattern']) {
-      return 'Formato inválido. Use: (XX) XXXXX-XXXX';
+      return 'Formato inválido. Use: (XX) 9XXXX-XXXX';
     }
 
     return '';
   }
-
 }

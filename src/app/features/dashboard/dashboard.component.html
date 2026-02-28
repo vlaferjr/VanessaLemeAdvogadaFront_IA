@@ -1,0 +1,17 @@
+<mat-sidenav-container class="dashboard-container" autosize>
+  <!-- Sidebar -->
+  <mat-sidenav #sidenav class="sidebar" mode="side" [opened]="!(isHandset$ | async)" [fixedInViewport]="(isHandset$ | async)">
+    <app-sidebar (navigated)="closeSidenav()"></app-sidebar>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content>
+    <!-- Navbar -->
+    <app-navbar (toggleSidenav)="toggleSidenav()"></app-navbar>
+
+    <!-- Page Content -->
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

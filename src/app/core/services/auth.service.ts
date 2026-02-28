@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
 import { StorageService } from './storage.service';
+import { environment } from 'src/environments/environment';
 
 export interface LoginResponse {
   id: number;
@@ -25,22 +26,16 @@ export interface User {
 @Injectable({
   providedIn: 'root'
 })
-
-@Injectable({
-  providedIn: 'root'
-})
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = `${environment.apiUrl}${environment.endpoints.auth.login}`.replace('/login', '');
 
-  // Subject para controlar estado de autenticação
+  // Subjects para reatividade
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  // Subject para dados do usuário
   private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  // Timer para verificar expiração da sessão
   private sessionCheckInterval: any;
 
   constructor(
@@ -48,7 +43,6 @@ export class AuthService {
     private router: Router,
     private storage: StorageService
   ) {
-    // Inicia verificação de sessão se já estiver logado
     if (this.isLoggedIn()) {
       this.startSessionCheck();
     }
@@ -58,11 +52,11 @@ export class AuthService {
    * Efetua login do usuário
    */
   login(email: string, senha: string, rememberMe: boolean = false): Observable<LoginResponse> {
+    const url = `${this.apiUrl}${environment.endpoints.auth.login}`;
     const body = { email, senha };
 
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, body).pipe(
+    return this.http.post<LoginResponse>(url, body).pipe(
       tap(response => {
-        // Salva tokens e dados do usuário
         this.storage.saveToken(response.accessToken, rememberMe);
         this.storage.saveRefreshToken(response.refreshToken, rememberMe);
 
@@ -74,11 +68,9 @@ export class AuthService {
         };
         this.storage.saveUser(user, rememberMe);
 
-        // Atualiza subjects
         this.isAuthenticatedSubject.next(true);
         this.currentUserSubject.next(user);
 
-        // Inicia verificação de sessão
         this.startSessionCheck();
       }),
       catchError(error => {
@@ -93,14 +85,14 @@ export class AuthService {
    */
   logout(): Observable<any> {
     const token = this.storage.getToken();
+    const url = `${this.apiUrl}${environment.endpoints.auth.logout}`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this.http.post(`${this.apiUrl}/logout`, {}, { headers }).pipe(
+    return this.http.post(url, {}, { headers }).pipe(
       tap(() => {
         this.clearSession();
       }),
       catchError(error => {
-        // Mesmo com erro, limpa sessão local
         this.clearSession();
         return throwError(() => error);
       })
@@ -123,17 +115,16 @@ export class AuthService {
    */
   renewSession(): Observable<LoginResponse> {
     const token = this.storage.getToken();
+    const url = `${this.apiUrl}${environment.endpoints.auth.renewSession}`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this.http.post<LoginResponse>(`${this.apiUrl}/renew-session`, {}, { headers }).pipe(
+    return this.http.post<LoginResponse>(url, {}, { headers }).pipe(
       tap(response => {
-        // Atualiza tokens
         this.storage.saveToken(response.accessToken, this.storage.isRememberMe());
         if (response.refreshToken) {
           this.storage.saveRefreshToken(response.refreshToken, this.storage.isRememberMe());
         }
 
-        // Atualiza usuário
         const user: User = {
           id: response.id,
           nome: response.nome,
@@ -156,9 +147,10 @@ export class AuthService {
    */
   getMe(): Observable<User> {
     const token = this.storage.getToken();
+    const url = `${this.apiUrl}${environment.endpoints.auth.me}`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this.http.get<User>(`${this.apiUrl}/me`, { headers }).pipe(
+    return this.http.get<User>(url, { headers }).pipe(
       tap(user => {
         this.storage.saveUser(user, this.storage.isRememberMe());
         this.currentUserSubject.next(user);
@@ -175,11 +167,11 @@ export class AuthService {
    */
   checkSession(): Observable<any> {
     const token = this.storage.getToken();
+    const url = `${this.apiUrl}${environment.endpoints.auth.checkSession}`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this.http.get(`${this.apiUrl}/check-session`, { headers }).pipe(
+    return this.http.get(url, { headers }).pipe(
       map((response: any) => {
-        // Se sessão está expirando, mostra modal de renovação
         if (response.status === 'EXPIRING') {
           this.showRenewSessionDialog(response.remainingSeconds);
         }
@@ -196,16 +188,14 @@ export class AuthService {
   }
 
   /**
-   * Inicia verificação periódica de sessão (a cada 30 segundos)
+   * Inicia verificação periódica de sessão
    */
   private startSessionCheck(): void {
-    // Limpa qualquer interval anterior
     this.stopSessionCheck();
 
-    // Verifica a cada 30 segundos
     this.sessionCheckInterval = setInterval(() => {
       this.checkSession().subscribe();
-    }, 30000); // 30 segundos
+    }, 30000);
   }
 
   /**
@@ -220,10 +210,8 @@ export class AuthService {
 
   /**
    * Mostra dialog perguntando se deseja renovar sessão
-   * (você pode implementar com MatDialog depois)
    */
   private showRenewSessionDialog(remainingSeconds: number): void {
-    // TODO: Implementar com MatDialog
     const shouldRenew = confirm(
       `Sua sessão expirará em ${remainingSeconds} segundos. Deseja continuar conectado?`
     );
@@ -245,12 +233,12 @@ export class AuthService {
    */
   changePassword(currentPassword: string, newPassword: string): Observable<any> {
     const token = this.storage.getToken();
+    const url = `${this.apiUrl}${environment.endpoints.auth.changePassword}`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     const body = { currentPassword, newPassword };
 
-    return this.http.post(`${this.apiUrl}/change-password`, body, { headers }).pipe(
+    return this.http.post(url, body, { headers }).pipe(
       tap(() => {
-        // Após trocar senha, faz logout para segurança
         this.clearSession();
       }),
       catchError(error => {
@@ -264,16 +252,18 @@ export class AuthService {
    * Solicita reset de senha (esqueci senha)
    */
   forgotPassword(email: string): Observable<any> {
+    const url = `${this.apiUrl}${environment.endpoints.auth.forgotPassword}`;
     const body = { email };
-    return this.http.post(`${this.apiUrl}/forgot-password`, body);
+    return this.http.post(url, body);
   }
 
   /**
    * Aplica reset de senha com token
    */
   resetPassword(token: string, newPassword: string): Observable<any> {
+    const url = `${this.apiUrl}${environment.endpoints.auth.resetPassword}`;
     const body = { token, newPassword };
-    return this.http.post(`${this.apiUrl}/reset-password`, body);
+    return this.http.post(url, body);
   }
 
   /**

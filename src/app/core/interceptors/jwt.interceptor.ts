@@ -6,56 +6,32 @@ import {
   HttpInterceptor,
   HttpErrorResponse
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { catchError, filter, take, switchMap } from 'rxjs/operators';
 import { StorageService } from '../services/storage.service';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../services/auth.service';
 
-/**
- * Interceptor que adiciona token JWT em todas as requisições
- * e trata erros de autenticação
- */
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
+  private isRefreshing = false;
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
     private storage: StorageService,
-    private router: Router,
-    private snackBar: MatSnackBar
-  ) {}
+    private authService: AuthService
+  ) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-
-    // Obtém token do storage
-    const token = this.storage.getToken();
-
-    // Se existir token e não for requisição de login/public, adiciona header
-    if (token && !this.isPublicEndpoint(request.url)) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+    // Adiciona token se existir
+    if (this.storage.getToken()) {
+      request = this.addToken(request, this.storage.getToken()!);
     }
 
-    // Processa requisição e trata erros
     return next.handle(request).pipe(
-      catchError((error: HttpErrorResponse) => {
-
-        // Erro 401: Não autorizado (token inválido/expirado)
-        if (error.status === 401) {
-          this.handle401Error();
-        }
-
-        // Erro 403: Proibido (sem permissão)
-        if (error.status === 403) {
-          this.handle403Error();
-        }
-
-        // Erro 500: Erro do servidor
-        if (error.status === 500) {
-          this.handle500Error();
+      catchError(error => {
+        // Se erro de autenticação (401)
+        if (error instanceof HttpErrorResponse && error.status === 401) {
+          return this.handle401Error(request, next);
         }
 
         return throwError(() => error);
@@ -64,58 +40,52 @@ export class JwtInterceptor implements HttpInterceptor {
   }
 
   /**
-   * Verifica se é endpoint público (não precisa de autenticação)
+   * Adiciona token no header
    */
-  private isPublicEndpoint(url: string): boolean {
-    const publicEndpoints = [
-      '/auth/login',
-      '/auth/forgot-password',
-      '/auth/reset-password'
-    ];
-
-    return publicEndpoints.some(endpoint => url.includes(endpoint));
-  }
-
-  /**
-   * Trata erro 401 (não autorizado)
-   */
-  private handle401Error(): void {
-    // Limpa storage
-    this.storage.clearStorage();
-
-    // Mostra mensagem
-    this.snackBar.open('Sua sessão expirou. Por favor, faça login novamente.', 'Fechar', {
-      duration: 5000,
-      horizontalPosition: 'end',
-      verticalPosition: 'top',
-      panelClass: ['error-snackbar']
-    });
-
-    // Redireciona para login
-    this.router.navigate(['/auth/login']);
-  }
-
-  /**
-   * Trata erro 403 (proibido)
-   */
-  private handle403Error(): void {
-    this.snackBar.open('Você não tem permissão para acessar este recurso.', 'Fechar', {
-      duration: 5000,
-      horizontalPosition: 'end',
-      verticalPosition: 'top',
-      panelClass: ['error-snackbar']
+  private addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
+    return request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
     });
   }
 
   /**
-   * Trata erro 500 (erro do servidor)
+   * Trata erro 401 (token expirado)
    */
-  private handle500Error(): void {
-    this.snackBar.open('Erro no servidor. Tente novamente mais tarde.', 'Fechar', {
-      duration: 5000,
-      horizontalPosition: 'end',
-      verticalPosition: 'top',
-      panelClass: ['error-snackbar']
-    });
+  private handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+      this.refreshTokenSubject.next(null);
+
+      const refreshToken = this.storage.getRefreshToken();
+
+      if (refreshToken) {
+        return this.authService.renewSession().pipe(
+          switchMap((response: any) => {
+            this.isRefreshing = false;
+            this.refreshTokenSubject.next(response.accessToken);
+
+            // Salva novo token
+            this.storage.saveToken(response.accessToken, this.storage.isRememberMe());
+
+            return next.handle(this.addToken(request, response.accessToken));
+          }),
+          catchError((error) => {
+            this.isRefreshing = false;
+            this.authService['clearSession']();
+            return throwError(() => error);
+          })
+        );
+      }
+    }
+
+    return this.refreshTokenSubject.pipe(
+      filter(token => token != null),
+      take(1),
+      switchMap(token => {
+        return next.handle(this.addToken(request, token));
+      })
+    );
   }
 }

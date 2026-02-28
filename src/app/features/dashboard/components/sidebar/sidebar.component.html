@@ -1,0 +1,33 @@
+<div class="sidebar-container">
+  <!-- Logo/Header -->
+  <div class="sidebar-header">
+    <div class="logo">
+      <mat-icon>account_balance</mat-icon>
+      <span>Vanessa Leme</span>
+    </div>
+  </div>
+
+  <!-- Menu Items -->
+  <nav class="sidebar-nav">
+    <mat-nav-list>
+      <mat-list-item *ngFor="let item of menuItems" [routerLink]="item.route" routerLinkActive="active">
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label }}</span>
+      </mat-list-item>
+    </mat-nav-list>
+  </nav>
+
+  <!-- User Info -->
+  <div class="sidebar-footer" *ngIf="(authService.currentUser$ | async) as user">
+    <div class="user-info">
+      <div class="user-avatar">
+        <mat-icon>person</mat-icon>
+      </div>
+      <div class="user-details">
+        <p class="user-name">{{ user.nome }}</p>
+        <p class="user-role">{{ user.role }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+

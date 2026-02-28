@@ -1,25 +1,20 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
+// Material
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
-
-// Módulos compartilhados
-
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 // Interceptors
-import { SharedModule } from './shared/shared.module';
-import { AboutComponent } from './features/about/about/about.component';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
+import { SharedModule } from "src/app/shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -29,16 +24,13 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule,
-    MatGridListModule,
-    MatMenuModule,
-    BrowserModule,
     HttpClientModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatToolbarModule,
+    MatSidenavModule,
     SharedModule
-  ],
+],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

@@ -1,0 +1,72 @@
+<div class="overview-container">
+  <h1 class="page-title">Dashboard</h1>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <!-- Stats Cards -->
+  <div *ngIf="!isLoading" class="stats-grid">
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Total de Clientes</p>
+          <h2 class="stat-value">{{ stats.totalClientes }}</h2>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon">
+          <mat-icon>description</mat-icon>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Total de Processos</p>
+          <h2 class="stat-value">{{ stats.totalProcessos }}</h2>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon open">
+          <mat-icon>schedule</mat-icon>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Processos Abertos</p>
+          <h2 class="stat-value">{{ stats.processosAbertos }}</h2>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon closed">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Processos Encerrados</p>
+          <h2 class="stat-value">{{ stats.processosEncerrados }}</h2>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Welcome Message -->
+  <mat-card class="welcome-card" *ngIf="!isLoading && (authService.currentUser$ | async) as user">
+    <mat-card-header>
+      <mat-card-title>Bem-vindo, {{ user.nome }}!</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        Você está logado como <strong>{{ user.role }}</strong>.
+        Use o menu lateral para navegar entre as funcionalidades do sistema.
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>

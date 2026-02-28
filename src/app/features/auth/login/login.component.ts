@@ -1,23 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   isLoading = false;
   hidePassword = true;
+  returnUrl: string = '';
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
@@ -31,14 +36,25 @@ export class LoginComponent implements OnInit{
     // Se já estiver logado, redireciona
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/dashboard']);
+      return;
     }
+
+    // Obtém URL de retorno
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   // Getters para validação
   get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
 
-  // Submit do formulário
+  /**
+   * Submit do formulário
+   */
   onSubmit(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -48,41 +64,58 @@ export class LoginComponent implements OnInit{
     this.isLoading = true;
     const { email, password, rememberMe } = this.loginForm.value;
 
-    this.authService.login(email, password, rememberMe).subscribe({
-      next: (response) => {
-        this.isLoading = false;
+    this.authService.login(email, password, rememberMe)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.isLoading = false;
 
-        this.snackBar.open('Login realizado com sucesso!', 'Fechar', {
-          duration: 3000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          panelClass: ['success-snackbar']
-        });
+          this.snackBar.open('Login realizado com sucesso!', 'Fechar', {
+            duration: 3000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar']
+          });
 
-        // Redireciona baseado no role
-        const role = response.role;
-        if (role === 'ADVOGADA' || role === 'ADMIN') {
-          this.router.navigate(['/dashboard']);
-        } else {
-          this.router.navigate(['/dashboard/processos']);
+          // Aguarda um pouco antes de redirecionar
+          setTimeout(() => {
+            this.router.navigateByUrl(this.returnUrl);
+          }, 500);
+        },
+        error: (error) => {
+          this.isLoading = false;
+
+          let errorMessage = 'Erro ao fazer login. Verifique suas credenciais.';
+
+          if (error.error?.message) {
+            errorMessage = error.error.message;
+          } else if (error.error?.errors) {
+            errorMessage = Object.values(error.error.errors).join(', ');
+          } else if (error.status === 0) {
+            errorMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão.';
+          } else if (error.status === 401) {
+            errorMessage = 'Email ou senha incorretos.';
+          } else if (error.status === 403) {
+            errorMessage = 'Acesso negado. Você não tem permissão para acessar.';
+          } else if (error.status === 500) {
+            errorMessage = 'Erro no servidor. Tente novamente mais tarde.';
+          }
+
+          this.snackBar.open(errorMessage, 'Fechar', {
+            duration: 5000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+            panelClass: ['error-snackbar']
+          });
+
+          console.error('Erro ao fazer login:', error);
         }
-      },
-      error: (error) => {
-        this.isLoading = false;
-
-        const errorMessage = error.error?.message || 'Erro ao fazer login. Verifique suas credenciais.';
-
-        this.snackBar.open(errorMessage, 'Fechar', {
-          duration: 5000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar']
-        });
-      }
-    });
+      });
   }
 
-  // Obter mensagem de erro
+  /**
+   * Obter mensagem de erro
+   */
   getErrorMessage(field: string): string {
     const control = this.loginForm.get(field);
 
@@ -103,5 +136,12 @@ export class LoginComponent implements OnInit{
     }
 
     return '';
+  }
+
+  /**
+   * Toggle senha
+   */
+  togglePasswordVisibility(): void {
+    this.hidePassword = !this.hidePassword;
   }
 }

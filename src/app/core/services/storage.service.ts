@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
-
-interface User {
+export interface User {
   id: number;
   nome: string;
   email: string;
@@ -12,31 +11,35 @@ interface User {
   providedIn: 'root'
 })
 export class StorageService {
+  private tokenKey = 'access_token';
+  private refreshTokenKey = 'refresh_token';
+  private userKey = 'user_data';
+  private rememberMeKey = 'remember_me';
 
-   private readonly TOKEN_KEY = 'access_token';
-  private readonly REFRESH_TOKEN_KEY = 'refresh_token';
-  private readonly USER_KEY = 'user_data';
-  private readonly REMEMBER_ME_KEY = 'remember_me';
-
-  constructor() {}
+  constructor() { }
 
   /**
    * Salva token de acesso
    */
   saveToken(token: string, rememberMe: boolean = false): void {
     const storage = rememberMe ? localStorage : sessionStorage;
-    storage.setItem(this.TOKEN_KEY, token);
-
-    if (rememberMe) {
-      localStorage.setItem(this.REMEMBER_ME_KEY, 'true');
-    }
+    storage.setItem(this.tokenKey, token);
+    localStorage.setItem(this.rememberMeKey, rememberMe.toString());
   }
 
   /**
    * Obtém token de acesso
    */
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY) || sessionStorage.getItem(this.TOKEN_KEY);
+    return localStorage.getItem(this.tokenKey) || sessionStorage.getItem(this.tokenKey);
+  }
+
+  /**
+   * Remove token de acesso
+   */
+  removeToken(): void {
+    localStorage.removeItem(this.tokenKey);
+    sessionStorage.removeItem(this.tokenKey);
   }
 
   /**
@@ -44,15 +47,22 @@ export class StorageService {
    */
   saveRefreshToken(token: string, rememberMe: boolean = false): void {
     const storage = rememberMe ? localStorage : sessionStorage;
-    storage.setItem(this.REFRESH_TOKEN_KEY, token);
+    storage.setItem(this.refreshTokenKey, token);
   }
 
   /**
    * Obtém refresh token
    */
   getRefreshToken(): string | null {
-    return localStorage.getItem(this.REFRESH_TOKEN_KEY) ||
-           sessionStorage.getItem(this.REFRESH_TOKEN_KEY);
+    return localStorage.getItem(this.refreshTokenKey) || sessionStorage.getItem(this.refreshTokenKey);
+  }
+
+  /**
+   * Remove refresh token
+   */
+  removeRefreshToken(): void {
+    localStorage.removeItem(this.refreshTokenKey);
+    sessionStorage.removeItem(this.refreshTokenKey);
   }
 
   /**
@@ -60,48 +70,39 @@ export class StorageService {
    */
   saveUser(user: User, rememberMe: boolean = false): void {
     const storage = rememberMe ? localStorage : sessionStorage;
-    storage.setItem(this.USER_KEY, JSON.stringify(user));
+    storage.setItem(this.userKey, JSON.stringify(user));
   }
 
   /**
    * Obtém dados do usuário
    */
   getUser(): User | null {
-    const userStr = localStorage.getItem(this.USER_KEY) ||
-                    sessionStorage.getItem(this.USER_KEY);
-
-    if (!userStr) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(userStr);
-    } catch (error) {
-      console.error('Erro ao parsear dados do usuário:', error);
-      return null;
-    }
+    const user = localStorage.getItem(this.userKey) || sessionStorage.getItem(this.userKey);
+    return user ? JSON.parse(user) : null;
   }
 
   /**
-   * Verifica se está com "lembrar-me" ativo
+   * Remove dados do usuário
    */
-  isRememberMe(): boolean {
-    return localStorage.getItem(this.REMEMBER_ME_KEY) === 'true';
+  removeUser(): void {
+    localStorage.removeItem(this.userKey);
+    sessionStorage.removeItem(this.userKey);
   }
 
   /**
-   * Limpa todo o storage
+   * Limpa todo armazenamento
    */
   clearStorage(): void {
-    // Limpa localStorage
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.REFRESH_TOKEN_KEY);
-    localStorage.removeItem(this.USER_KEY);
-    localStorage.removeItem(this.REMEMBER_ME_KEY);
+    this.removeToken();
+    this.removeRefreshToken();
+    this.removeUser();
+    localStorage.removeItem(this.rememberMeKey);
+  }
 
-    // Limpa sessionStorage
-    sessionStorage.removeItem(this.TOKEN_KEY);
-    sessionStorage.removeItem(this.REFRESH_TOKEN_KEY);
-    sessionStorage.removeItem(this.USER_KEY);
+  /**
+   * Verifica se "Lembrar me" está ativo
+   */
+  isRememberMe(): boolean {
+    return localStorage.getItem(this.rememberMeKey) === 'true';
   }
 }

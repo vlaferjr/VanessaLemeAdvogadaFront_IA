@@ -1,0 +1,30 @@
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #1a237e 0%, darken(#1a237e, 5%) 100%);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .menu-button {
+    margin-right: 8px;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .user-menu-button {
+    margin: 0 8px;
+  }
+}
+
+::ng-deep .user-menu {
+  .mat-menu-content {
+    padding: 8px 0 !important;
+  }
+}
+
+mat-spinner {
+  display: inline-block;
+  margin-right: 8px;
+}
