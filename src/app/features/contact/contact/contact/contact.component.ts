@@ -105,7 +105,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.snackBar.open('Por favor, preencha todos os campos corretamente.', 'Fechar', {
         duration: 4000,
         horizontalPosition: 'end',
-        verticalPosition: 'top',
+        verticalPosition: 'bottom',
         panelClass: ['error-snackbar']
       });
       return;
@@ -126,7 +126,7 @@ export class ContactComponent implements OnInit, OnDestroy {
           this.snackBar.open('Mensagem enviada com sucesso! Retornaremos em breve.', 'Fechar', {
             duration: 5000,
             horizontalPosition: 'end',
-            verticalPosition: 'top',
+            verticalPosition: 'bottom',
             panelClass: ['success-snackbar']
           });
 
@@ -152,7 +152,7 @@ export class ContactComponent implements OnInit, OnDestroy {
           this.snackBar.open(errorMessage, 'Fechar', {
             duration: 5000,
             horizontalPosition: 'end',
-            verticalPosition: 'top',
+            verticalPosition: 'bottom',
             panelClass: ['error-snackbar']
           });
 

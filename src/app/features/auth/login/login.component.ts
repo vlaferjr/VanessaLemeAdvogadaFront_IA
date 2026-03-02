@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.snackBar.open('Login realizado com sucesso!', 'Fechar', {
             duration: 3000,
             horizontalPosition: 'end',
-            verticalPosition: 'top',
+            verticalPosition: 'bottom',
             panelClass: ['success-snackbar']
           });
 
@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.snackBar.open(errorMessage, 'Fechar', {
             duration: 5000,
             horizontalPosition: 'end',
-            verticalPosition: 'top',
+            verticalPosition: 'bottom',
             panelClass: ['error-snackbar']
           });
 

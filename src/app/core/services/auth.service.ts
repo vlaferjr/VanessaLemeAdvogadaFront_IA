@@ -27,7 +27,7 @@ export interface User {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = `${environment.apiUrl}${environment.endpoints.auth.login}`.replace('/login', '');
+  private apiUrl = environment.apiUrl;
 
   // Subjects para reatividade
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
