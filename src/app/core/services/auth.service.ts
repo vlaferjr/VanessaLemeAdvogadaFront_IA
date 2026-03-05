@@ -252,18 +252,29 @@ export class AuthService {
    * Solicita reset de senha (esqueci senha)
    */
   forgotPassword(email: string): Observable<any> {
-    const url = `${this.apiUrl}${environment.endpoints.auth.forgotPassword}`;
-    const body = { email };
-    return this.http.post(url, body);
+  const url = `${environment.apiUrl}${environment.endpoints.auth.forgotPassword}`;
+
+  return this.http.post(url, { email }).pipe(
+    catchError(error => {
+      console.error('Erro ao solicitar recuperação de senha:', error);
+      return throwError(() => error);
+    }));
   }
 
   /**
    * Aplica reset de senha com token
    */
   resetPassword(token: string, newPassword: string): Observable<any> {
-    const url = `${this.apiUrl}${environment.endpoints.auth.resetPassword}`;
-    const body = { token, newPassword };
-    return this.http.post(url, body);
+  const url = `${environment.apiUrl}${environment.endpoints.auth.resetPassword}`;
+
+  return this.http.post(url, {
+    token,
+    newPassword
+    }).pipe(
+    catchError(error => {
+      console.error('Erro ao redefinir senha:', error);
+      return throwError(() => error);
+    }));
   }
 
   /**

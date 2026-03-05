@@ -21,6 +21,11 @@ const routes: Routes = [
     loadChildren: () => import('./features/contact/contact.module').then(m => m.ContactModule)
   },
   {
+    path: 'reset-password',
+    redirectTo: 'auth/reset-password',
+    pathMatch: 'full'
+  },
+  {
     path: 'sobre',
     loadChildren: () => import('./features/about/about.module').then(m => m.AboutModule)
   },
