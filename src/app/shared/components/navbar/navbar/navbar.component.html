@@ -1,10 +1,19 @@
 <mat-toolbar color="primary" class="navbar">
+  <!-- Menu do dashboard -->
+  <button
+    mat-icon-button
+    class="menu-button"
+    (click)="toggleDashboardSidenav()"
+    *ngIf="(isDashboardRoute$ | async) && (isAuthenticated$ | async)">
+    <mat-icon>menu</mat-icon>
+  </button>
+
   <!-- Menu hamburguer (mobile) -->
   <button
     mat-icon-button
     class="menu-button"
     (click)="toggleMobileMenu()"
-    *ngIf="isHandset$ | async">
+    *ngIf="(isHandset$ | async) && !(isDashboardRoute$ | async)">
     <mat-icon>{{ mobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
   </button>
 
@@ -56,13 +65,18 @@
         <mat-icon>account_circle</mat-icon>
       </button>
       <mat-menu #userMenu="matMenu">
+        <button mat-menu-item disabled>
+          <span *ngIf="currentUser$ | async as user">{{ user.email }}</span>
+        </button>
+        <mat-divider></mat-divider>
         <button mat-menu-item routerLink="/dashboard/perfil">
           <mat-icon>person</mat-icon>
           Meu Perfil
         </button>
         <button mat-menu-item (click)="logout()">
-          <mat-icon>exit_to_app</mat-icon>
-          Sair
+          <mat-icon *ngIf="!isLoading">exit_to_app</mat-icon>
+          <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+          <span>Sair</span>
         </button>
       </mat-menu>
     </ng-template>
@@ -70,7 +84,7 @@
 </mat-toolbar>
 
 <!-- Menu mobile (drawer) -->
-<mat-nav-list class="mobile-menu" *ngIf="mobileMenuOpen && (isHandset$ | async)">
+<mat-nav-list class="mobile-menu" *ngIf="mobileMenuOpen && (isHandset$ | async) && !(isDashboardRoute$ | async)">
   <a
     mat-list-item
     routerLink="/"
@@ -109,6 +123,11 @@
   </ng-container>
 
   <ng-template #mobileLoggedIn>
+    <mat-list-item>
+      <mat-icon matListItemIcon>account_circle</mat-icon>
+      <span matListItemTitle *ngIf="currentUser$ | async as user">{{ user.email }}</span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
     <a mat-list-item routerLink="/dashboard" (click)="closeMobileMenu()">
       <mat-icon matListItemIcon>dashboard</mat-icon>
       <span matListItemTitle>Painel</span>
@@ -118,7 +137,8 @@
       <span matListItemTitle>Meu Perfil</span>
     </a>
     <a mat-list-item (click)="logout()">
-      <mat-icon matListItemIcon>exit_to_app</mat-icon>
+      <mat-icon matListItemIcon *ngIf="!isLoading">exit_to_app</mat-icon>
+      <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
       <span matListItemTitle>Sair</span>
     </a>
   </ng-template>

@@ -30,7 +30,6 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 // Components
 import { DashboardComponent } from './dashboard.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
 import { EmptyStateComponent } from './components/empty-state/empty-state.component';
 
 // Pages
@@ -44,7 +43,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   declarations: [
     DashboardComponent,
     SidebarComponent,
-    NavbarComponent,
     EmptyStateComponent,
     OverviewComponent,
     ClientesComponent,
@@ -79,4 +77,3 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   ]
 })
 export class DashboardModule { }
-
