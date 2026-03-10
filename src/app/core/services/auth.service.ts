@@ -1,9 +1,11 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+﻿import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { StorageService } from './storage.service';
 import { environment } from 'src/environments/environment';
+import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 
 export interface LoginResponse {
   id: number;
@@ -41,7 +43,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private storage: StorageService
+    private storage: StorageService,
+    private dialog: MatDialog
   ) {
     if (this.isLoggedIn()) {
       this.startSessionCheck();
@@ -172,14 +175,33 @@ export class AuthService {
 
     return this.http.get(url, { headers }).pipe(
       map((response: any) => {
-        if (response.status === 'EXPIRING') {
+        if (response?.status === 'EXPIRING') {
           this.showRenewSessionDialog(response.remainingSeconds);
+        }
+
+        const rawMessage = typeof response === 'string' ? response : response?.message;
+        const normalizedMessage = (rawMessage || '')
+          .toString()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase()
+          .trim();
+        const isUnauthorizedMessage = normalizedMessage.includes('nao autorizado');
+
+        if (response?.status === 'EXPIRED' || isUnauthorizedMessage) {
+          this.clearSession();
         }
         return response;
       }),
       catchError(error => {
         console.error('Erro ao verificar sessão:', error);
-        if (error.status === 401) {
+        const errorMessage = (error?.error?.message || error?.message || '')
+          .toString()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase()
+          .trim();
+        if (error.status === 401 || errorMessage.includes('nao autorizado')) {
           this.clearSession();
         }
         return throwError(() => error);
@@ -212,20 +234,29 @@ export class AuthService {
    * Mostra dialog perguntando se deseja renovar sessão
    */
   private showRenewSessionDialog(remainingSeconds: number): void {
-    const shouldRenew = confirm(
-      `Sua sessão expirará em ${remainingSeconds} segundos. Deseja continuar conectado?`
-    );
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '420px',
+      disableClose: true,
+      data: {
+        title: 'Sessão prestes a expirar',
+        message: `Sua sessão expirará em ${remainingSeconds} segundos. Deseja continuar conectado?`,
+        confirmText: 'SIM',
+        cancelText: 'NÃO'
+      }
+    });
 
-    if (shouldRenew) {
-      this.renewSession().subscribe({
-        next: () => {
-          console.log('Sessão renovada com sucesso');
-        },
-        error: (error) => {
-          console.error('Erro ao renovar sessão:', error);
-        }
-      });
-    }
+    dialogRef.afterClosed().subscribe((shouldRenew: boolean) => {
+      if (shouldRenew) {
+        this.renewSession().subscribe({
+          next: () => {
+            console.log('Sessão renovada com sucesso');
+          },
+          error: (error) => {
+            console.error('Erro ao renovar sessão:', error);
+          }
+        });
+      }
+    });
   }
 
   /**

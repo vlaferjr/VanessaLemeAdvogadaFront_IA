@@ -20,6 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { NavbarComponent } from './components/navbar/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer/footer.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 // Componentes
 
@@ -45,7 +46,8 @@ const MATERIAL_MODULES = [
 @NgModule({
   declarations: [
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
@@ -55,6 +57,7 @@ const MATERIAL_MODULES = [
   exports: [
     NavbarComponent,
     FooterComponent,
+    ConfirmDialogComponent,
     ...MATERIAL_MODULES
   ]
 })

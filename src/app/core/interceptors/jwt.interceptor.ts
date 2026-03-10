@@ -22,6 +22,8 @@ export class JwtInterceptor implements HttpInterceptor {
   ) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    const isCheckSession = request.url.includes('/auth/check-session');
+
     // Adiciona token se existir
     if (this.storage.getToken()) {
       request = this.addToken(request, this.storage.getToken()!);
@@ -31,6 +33,11 @@ export class JwtInterceptor implements HttpInterceptor {
       catchError(error => {
         // Se erro de autenticação (401)
         if (error instanceof HttpErrorResponse && error.status === 401) {
+          if (isCheckSession) {
+            // Não tenta renovar sessão no check-session
+            this.authService['clearSession']();
+            return throwError(() => error);
+          }
           return this.handle401Error(request, next);
         }
 
